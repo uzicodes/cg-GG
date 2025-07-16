@@ -24,14 +24,20 @@ class UniversitySelectionScreen extends StatefulWidget {
   const UniversitySelectionScreen({super.key});
 
   @override
-  State<UniversitySelectionScreen> createState() => _UniversitySelectionScreenState();
+  State<UniversitySelectionScreen> createState() =>
+      _UniversitySelectionScreenState();
 }
 
 class _UniversitySelectionScreenState extends State<UniversitySelectionScreen> {
   final List<String> universities = [
-    'University A',
-    'University B',
-    'University C',
+    'BRAC University',
+    'North South University',
+    'AIUB',
+    'IUB',
+    'East West University',
+    'UIU',
+    'ULAB',
+    'Daffodil University',
   ];
   String? selectedUniversity;
 
@@ -46,7 +52,9 @@ class _UniversitySelectionScreenState extends State<UniversitySelectionScreen> {
       body: Center(
         child: Card(
           margin: const EdgeInsets.all(24),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
           elevation: 4,
           child: Padding(
             padding: const EdgeInsets.all(32.0),
@@ -61,7 +69,9 @@ class _UniversitySelectionScreenState extends State<UniversitySelectionScreen> {
                 DropdownButtonFormField<String>(
                   decoration: const InputDecoration(
                     labelText: 'University',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(16)),
+                    ),
                     filled: true,
                   ),
                   value: selectedUniversity,
@@ -153,7 +163,9 @@ class _CourseEntryScreenState extends State<CourseEntryScreen> {
         child: Column(
           children: [
             Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
               elevation: 2,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -167,10 +179,15 @@ class _CourseEntryScreenState extends State<CourseEntryScreen> {
                           controller: _courseNameController,
                           decoration: const InputDecoration(
                             labelText: 'Course Name',
-                            border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(12),
+                              ),
+                            ),
                             filled: true,
                           ),
-                          validator: (val) => val == null || val.isEmpty ? 'Required' : null,
+                          validator: (val) =>
+                              val == null || val.isEmpty ? 'Required' : null,
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -180,10 +197,15 @@ class _CourseEntryScreenState extends State<CourseEntryScreen> {
                           controller: _gradeController,
                           decoration: const InputDecoration(
                             labelText: 'Grade',
-                            border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(12),
+                              ),
+                            ),
                             filled: true,
                           ),
-                          validator: (val) => val == null || val.isEmpty ? 'Required' : null,
+                          validator: (val) =>
+                              val == null || val.isEmpty ? 'Required' : null,
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -193,11 +215,16 @@ class _CourseEntryScreenState extends State<CourseEntryScreen> {
                           controller: _creditController,
                           decoration: const InputDecoration(
                             labelText: 'Credit',
-                            border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(12),
+                              ),
+                            ),
                             filled: true,
                           ),
                           keyboardType: TextInputType.number,
-                          validator: (val) => val == null || val.isEmpty ? 'Required' : null,
+                          validator: (val) =>
+                              val == null || val.isEmpty ? 'Required' : null,
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -219,11 +246,18 @@ class _CourseEntryScreenState extends State<CourseEntryScreen> {
                       itemBuilder: (context, index) {
                         final course = courses[index];
                         return Card(
-                          margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 0),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          margin: const EdgeInsets.symmetric(
+                            vertical: 6,
+                            horizontal: 0,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                           elevation: 1,
                           child: ListTile(
-                            title: Text('${course['name']} (${course['credit']} credits)'),
+                            title: Text(
+                              '${course['name']} (${course['credit']} credits)',
+                            ),
                             subtitle: Text('Grade: ${course['grade']}'),
                             trailing: IconButton(
                               icon: const Icon(Icons.delete_outline),
@@ -269,7 +303,11 @@ class ResultScreen extends StatelessWidget {
   final List<Map<String, dynamic>> courses;
   final String university;
 
-  const ResultScreen({super.key, required this.courses, required this.university});
+  const ResultScreen({
+    super.key,
+    required this.courses,
+    required this.university,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -288,23 +326,33 @@ class ResultScreen extends StatelessWidget {
       body: Center(
         child: Card(
           margin: const EdgeInsets.all(32),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
           elevation: 4,
           child: Padding(
             padding: const EdgeInsets.all(32.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('University: $university', style: const TextStyle(fontSize: 18)),
+                Text(
+                  'University: $university',
+                  style: const TextStyle(fontSize: 18),
+                ),
                 const SizedBox(height: 16),
                 const Text('Your CGPA is:', style: TextStyle(fontSize: 18)),
                 Text(
                   cgpa.toStringAsFixed(2),
-                  style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.deepPurple),
+                  style: const TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepPurple,
+                  ),
                 ),
                 const SizedBox(height: 32),
                 FilledButton.tonal(
-                  onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),
+                  onPressed: () =>
+                      Navigator.popUntil(context, (route) => route.isFirst),
                   child: const Text('Start Over'),
                 ),
               ],

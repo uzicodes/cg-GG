@@ -196,7 +196,8 @@ class _CourseEntryScreenState extends State<CourseEntryScreen> {
                         child: TextFormField(
                           controller: _gradeController,
                           decoration: const InputDecoration(
-                            labelText: 'Grade',
+                            labelText: 'Grade Point',
+                            hintText: 'e.g. 4.0, 3.7, 3.0',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(12),
@@ -237,6 +238,46 @@ class _CourseEntryScreenState extends State<CourseEntryScreen> {
                 ),
               ),
             ),
+            // Show grading scale for BRAC University
+            if (widget.university == 'BRAC University') ...[
+              const SizedBox(height: 16),
+              Card(
+                color: Color(0xFFF5F5F5),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                ),
+                elevation: 0,
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'BRAC University Grading Scale',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text('97 - 100 = A+ (4.0) Exceptional'),
+                      Text('90 - <97 = A (4.0) Excellent'),
+                      Text('85 - <90 = A- (3.7)'),
+                      Text('80 - <85 = B+ (3.3)'),
+                      Text('75 - <80 = B (3.0) Good'),
+                      Text('70 - <75 = B- (2.7)'),
+                      Text('65 - <70 = C+ (2.3)'),
+                      Text('60 - <65 = C (2.0) Fair'),
+                      Text('57 - <60 = C- (1.7)'),
+                      Text('55 - <57 = D+ (1.3)'),
+                      Text('52 - <55 = D (1.0) Poor'),
+                      Text('50 - <52 = D- (0.7)'),
+                      Text('<50 = F (0.0) Failure'),
+                    ],
+                  ),
+                ),
+              ),
+            ],
             const SizedBox(height: 16),
             Expanded(
               child: courses.isEmpty
@@ -309,13 +350,32 @@ class ResultScreen extends StatelessWidget {
     required this.university,
   });
 
+  double calculateCGPA() {
+    if (courses.isEmpty) return 0.0;
+    double totalPoints = 0.0;
+    double totalCredits = 0.0;
+    for (final course in courses) {
+      final gradeStr = course['grade'];
+      final credit = course['credit'] ?? 0.0;
+      double gpa = 0.0;
+      if (university == 'BRAC University') {
+        // Try to parse as number, otherwise 0
+        final gradeNum = double.tryParse(gradeStr) ?? 0.0;
+        gpa = bracGradeToGPA(gradeNum);
+      } else {
+        // Default: try to parse as GPA directly
+        gpa = double.tryParse(gradeStr) ?? 0.0;
+      }
+      totalPoints += gpa * credit;
+      totalCredits += credit;
+    }
+    if (totalCredits == 0) return 0.0;
+    return totalPoints / totalCredits;
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Placeholder CGPA calculation
-    double cgpa = 0.0;
-    if (courses.isNotEmpty) {
-      cgpa = 3.5; // Replace with real logic later
-    }
+    final cgpa = calculateCGPA();
 
     return Scaffold(
       appBar: AppBar(
@@ -362,4 +422,20 @@ class ResultScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+double bracGradeToGPA(double grade) {
+  if (grade >= 97) return 4.0; // A+
+  if (grade >= 90) return 4.0; // A
+  if (grade >= 85) return 3.7; // A-
+  if (grade >= 80) return 3.3; // B+
+  if (grade >= 75) return 3.0; // B
+  if (grade >= 70) return 2.7; // B-
+  if (grade >= 65) return 2.3; // C+
+  if (grade >= 60) return 2.0; // C
+  if (grade >= 57) return 1.7; // C-
+  if (grade >= 55) return 1.3; // D+
+  if (grade >= 52) return 1.0; // D
+  if (grade >= 50) return 0.7; // D-
+  return 0.0; // F
 }
